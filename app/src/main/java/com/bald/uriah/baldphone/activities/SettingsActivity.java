@@ -47,6 +47,8 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bald.uriah.baldphone.BuildConfig;
@@ -64,7 +66,6 @@ import com.bald.uriah.baldphone.utils.UpdatingUtil;
 import com.bald.uriah.baldphone.views.BaldTitleBar;
 import com.bald.uriah.baldphone.views.ModularRecyclerView;
 import com.bumptech.glide.Glide;
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,11 +126,11 @@ public class SettingsActivity extends BaldActivity {
         final TypedValue typedValue = new TypedValue();
         final Resources.Theme theme = getTheme();
         theme.resolveAttribute(R.attr.bald_stroke_color, typedValue, true);
-        recyclerView.addItemDecoration(
-                new HorizontalDividerItemDecoration.Builder(this)
-                        .drawable(R.drawable.settings_divider)
-                        .build()
-        );
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.settings_divider));
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
         populateSettingsList();
         recyclerView.setAdapter(new SettingsRecyclerViewAdapter());
     }

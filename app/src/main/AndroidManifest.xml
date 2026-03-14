@@ -61,6 +61,7 @@
         <activity
             android:name=".activities.HomeScreenActivity"
             android:enabled="${fullApp}"
+            android:exported="true"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -73,7 +74,7 @@
         </activity>
         <activity
             android:name=".activities.DialerActivity"
-
+            android:exported="true"
             android:enabled="${fullApp}"
             android:label="@string/dialer">
             <intent-filter>
@@ -135,6 +136,7 @@
             android:label="@string/notifications" />
         <activity
             android:name=".activities.FakeLauncherActivity"
+            android:exported="true"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -155,7 +157,7 @@
             android:label="@string/photos" />
         <activity
             android:name=".activities.media.VideosActivity"
-
+            android:exported="true"
             android:enabled="${fullApp}"
             android:label="@string/videos">
             <intent-filter>
@@ -232,7 +234,7 @@
             android:enabled="${fullApp}" />
         <activity
             android:name=".activities.PhoneActivity"
-
+            android:exported="true"
             android:enabled="${fullApp}"
             android:label="@string/phone">
             <intent-filter>
@@ -261,6 +263,7 @@
 
         <service
             android:name=".keyboard.BaldInputMethodService"
+            android:exported="true"
             android:enabled="${fullApp}"
             android:permission="android.permission.BIND_INPUT_METHOD"
             android:screenOrientation="landscape"
@@ -274,6 +277,7 @@
         </service>
         <service
             android:name=".services.NotificationListenerService"
+            android:exported="true"
             android:enabled="${fullApp}"
             android:label="Bald Notification Service"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
@@ -285,6 +289,7 @@
 
         <receiver
             android:name=".broadcast_receivers.BootUpBroadcastReceiver"
+            android:exported="true"
             android:enabled="${fullApp}">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -292,6 +297,7 @@
         </receiver>
         <receiver
             android:name=".broadcast_receivers.LocalChangedReceiver"
+            android:exported="true"
             android:enabled="${fullApp}">
             <intent-filter>
                 <action android:name="android.intent.action.LOCALE_CHANGED" />
@@ -307,6 +313,7 @@
             android:process=":remote" />
         <receiver
             android:name=".broadcast_receivers.DownloadManagerReceiver"
+            android:exported="true"
             android:enabled="${fullApp}">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />

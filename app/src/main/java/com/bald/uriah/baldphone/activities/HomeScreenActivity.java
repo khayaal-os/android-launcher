@@ -30,6 +30,8 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
@@ -79,8 +81,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import github.nisrulz.lantern.Lantern;
-
 import static com.bald.uriah.baldphone.services.NotificationListenerService.ACTION_REGISTER_ACTIVITY;
 import static com.bald.uriah.baldphone.services.NotificationListenerService.ACTIVITY_NONE;
 import static com.bald.uriah.baldphone.services.NotificationListenerService.KEY_EXTRA_ACTIVITY;
@@ -109,7 +109,6 @@ public class HomeScreenActivity extends BaldActivity {
     public BaldPagerAdapter baldPagerAdapter;
 
     private Point screenSize;
-    private Lantern lantern;
     private SharedPreferences sharedPreferences;
     private BaldPrefsUtils baldPrefsUtils;
     private ViewPagerHolder viewPagerHolder;
@@ -219,11 +218,9 @@ public class HomeScreenActivity extends BaldActivity {
         }
 
         attachToXml();
-        lantern = new Lantern(this)
-                .observeLifecycle(this);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            flashInited = lantern.initTorch();
+            flashInited = true;
         }
 
         if (sharedPreferences.getBoolean(BPrefs.EMERGENCY_BUTTON_VISIBLE_KEY, BPrefs.EMERGENCY_BUTTON_VISIBLE_DEFAULT_VALUE))
@@ -322,9 +319,14 @@ public class HomeScreenActivity extends BaldActivity {
         if (flashInited) {
             flashButton.setOnClickListener((v) -> {
                 flashState = !flashState;
-                lantern.enableTorchMode(true);
-                if (!flashState) // looks weird (it is) but necessary. otherwise it wont turn off after device rotation...
-                    lantern.enableTorchMode(false);
+                try {
+                    CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+                    String cameraId = cameraManager.getCameraIdList()[0];
+                    cameraManager.setTorchMode(cameraId, flashState);
+                } catch (CameraAccessException | ArrayIndexOutOfBoundsException e) {
+                    Log.e(TAG, "Could not toggle torch", e);
+                    flashState = false;
+                }
                 flashButton.setImageResource(flashState ?
                         R.drawable.flashlight_on_background :
                         R.drawable.flashlight_off_on_background);
